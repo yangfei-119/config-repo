@@ -1,0 +1,70 @@
+logging:
+    level:
+#       tk.mybatis: INFO
+        cn.turing.firecontrol: DEBUG
+server:
+    port: 2222
+
+spring:
+    application:
+        name: turing-device
+    datasource:
+        url: jdbc:mysql://host:3306/turing_device?useUnicode=true&characterEncoding=UTF8&useSSL=true
+        druid:
+          stat-view-servlet:
+            loginUsername: root
+            loginPassword: 123456
+
+#配置数据库
+mybatis:
+    basepackage: cn.turing.firecontrol.device.mapper
+    xmlLocation: classpath:mapper/**/*.xml
+    mapper-locations: "classpath*:mapper/*.xml"
+    configuration:
+      cache-enabled: false
+      map-underscore-to-camel-case: true
+
+# 配置swagger
+swagger:
+    enabled: true
+    base-package: cn.turing.firecontrol.device
+    title: 消防大数据
+    version: 1.0.0.SNAPSHOT
+    description: 设备管理服务
+    contact:
+        name: 北京北控在线科技集团有限公司
+#    global-operation-parameters[0]:
+#            name: Authorization
+#            description: access_token
+#            modelRef: string
+#            parameterType: header
+#            required: true
+
+# 配置用户认证和服务认证信息
+auth:
+  serviceId: turing-auth
+  user:
+    token-header: Authorization
+    limit-expire: 1440 # 一天过去,单位分钟
+  client:
+    id: turing-device
+    secret: 123456
+    token-header: client-token
+
+mapper:
+  mappers: cn.turing.firecontrol.common.mapper.CommonMapper
+
+# 配置萤石开放平台账号
+yingShi:
+  appKey:
+  appSecret:
+
+# 小花儿人工智能图像识别接口
+xiaoHuaErAI:
+  appCode:
+  accuracyThreshold: 0.8  #accuracy>0.8 表示有很大可能发生火灾
+
+
+
+
+

@@ -1,0 +1,136 @@
+socketIP: 192.168.0.38
+socketPort: 3722
+#消防主机socket端口
+socketPort1: 3733
+timeout:
+  common: 3960000
+  yangan: 108000000
+  xiaofangshuan: 1800000
+  topSail: 6300000
+logging:
+  level:
+    #        tk.mybatis: DEBUG
+    cn.turing.firecontrol: INFO
+server:
+  port: 4396
+#  address: ${spring.cloud.client.ipAddress}
+  #140上的 端口 4396
+spring:
+  application:
+    name: turing-datacollection
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+#  boot:
+#    admin:
+#      url: http://192.168.0.22:8766
+#      client:
+#        prefer-ip: true
+  redis:
+    host: host
+    password: 123456
+    port: 6379
+    database: 0
+  rabbitmq:
+    host: rabbitmq.tmc-v1
+    port: 5672
+    username: rabbitmq
+    password: rabbitmq123
+    virtual-host: /
+  elasticsearch:
+      cluster-name: cluster-name
+      cluster-nodes: host:9300
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:host}:${MYSQL_PORT:3306}/turing_device?useUnicode=true&characterEncoding=UTF8&useSSL=true
+    druid:
+      stat-view-servlet:
+        loginUsername: root
+        loginPassword: 123456
+
+
+
+# 配置用户认证和服务认证信息
+auth:
+  serviceId: turing-auth
+  user:
+    token-header: Authorization
+    limit-expire: 1440 # 一天过去,单位分钟
+  client:
+    id: turing-datacollection
+    secret: 123456
+    token-header: client-token
+
+
+feign:
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
+
+ribbon:
+  eureka:
+    enabled: true
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+  MaxAutoRetries: 0
+  MaxAutoRetriesNextServer: 1
+  OkToRetryOnAllOperations: false
+
+hystrix:
+  threadpool:
+    default:
+      coreSize: 1000 #并发执行的最大线程数，默认10
+      maxQueueSize: 1000 #BlockingQueue的最大队列数
+      queueSizeRejectionThreshold: 500 #即使maxQueueSize没有达到，达到queueSizeRejectionThreshold该值后，请求也会被拒绝
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 15000
+
+EasyLinkIn:
+  common:
+    timeout: 1320
+  yangan:
+    timeout: 36000
+  xiaofangshuan:
+    timeout: 1800
+TopSail:
+  common:
+    timeout: 2100
+
+#mybatis:
+#  basepackage: cn.turing.firecontrol.server.mapper
+#  xmlLocation: classpath:mapper/**/*.xml
+#  mapper-locations: "classpath*:mapper/*.xml"
+#  configuration:
+#    cache-enabled: false
+
+rabbit:
+  fireDoor:
+    exchange: tmc.abnormal.demo
+    routingKey: abnormal
+  hengYang:
+    exchange: demo
+    routingKey: demo
+
+
+topics: tmc.demo
+
+mybatis:
+  #开启驼峰命名法
+  configuration:
+    map-underscore-to-camel-case: true
+mybatis-plus:
+  # xml地址
+  mapper-locations: classpath:mapper/*Mapper.xml
+  # 实体扫描，多个package用逗号或者分号分隔
+  type-aliases-package: cn.turing.firecontrol.server.entity   #自己的实体类地址
+  configuration:
+    # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+

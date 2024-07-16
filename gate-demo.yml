@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: turing-gate
+  thymeleaf:
+    mode: LEGACYHTML5
+    cache: false
+
+server:
+  port: 8765 #启动端口
+
+gate:
+  # 开发不进行权限校验的路径
+  ignore:
+    startWith: /static,/auth/oauth/,/admin/v2/api-docs,/dict/v2/api-docs,/auth/v2/api-docs,/dict/dictValue/type/comm_sex
+
+auth:
+  serviceId: turing-auth
+  user:
+    token-header: Authorization
+    limit-expire: 1440 #1天
+  client:
+    token-header: client-token
+    id: turing-gate  #不填则默认读取spring.application.name
+    secret: 123456
+
+# 配置swagger
+swagger:
+  enabled: true
+  base-package: cn.turing.firecontrol.gate
+  title: turing-gate
+  version: 1.0.0.SNAPSHOT
+  description: 网关服务
+  contact:
+    name: gate
+
+
+zuul:
+  ignored-services: "*"
+  sensitive-headers:
+  prefix: /api #为zuul设置一个公共的前缀
+  ratelimit: # 网关限流
+    key-prefix: gate_rate
+    enabled: true
+    repository: REDIS #REDIS, JPA, IN_MEMORY
+    behind-proxy: true
+    default-policy: #optional - will apply unless specific policy exists
+      limit: 5000
+      refresh-interval: 60 #default value (in seconds)
+      type: #optional
+      - user
+      - origin
+      - url
+#  FormBodyWrapperFilter:
+#    pre:
+#      disable: false

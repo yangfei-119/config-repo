@@ -1,0 +1,56 @@
+logging:
+  level:
+    cn.turing.firecontrol: DEBUG
+
+server:
+  port: 2345
+
+spring:
+  application:
+    name: turing-datahandler
+  datasource:
+    url: jdbc:mysql://host:3306/turing_datahandler?useUnicode=true&characterEncoding=UTF8
+
+# 配置数据库
+mybatis:
+  basepackage: cn.turing.firecontrol.datahandler.mapper
+  xmlLocation: classpath:mapper/**/*.xml
+  mapper-locations: "classpath*:mapper/*.xml"
+  configuration:
+    cache-enabled: false
+
+# 配置swagger
+swagger:
+  enabled: true
+  base-package: cn.turing.firecontrol.datahandler
+  title: 消防大数据
+  version: 1.0.0.SNAPSHOT
+  description: 数据处理管理服务
+  contact:
+    name: 北京北控在线科技集团有限公司
+  global-operation-parameters[0]:
+    name: Authorization
+    description: 12
+    modelRef: string
+    parameterType: header
+    required: false
+
+#配置用户认证和服务认证信息
+auth:
+  serviceId: turing-auth
+  user:
+    token-header: Authorization
+    limit-expire: 1440 # 一天过去,单位分钟
+  client:
+    id: turing-datahandler
+    secret: 123456
+    token-header: client-token
+mapper:
+  mappers: cn.turing.firecontrol.common.mapper.CommonMapper
+
+#自行配置激光推送
+jpush:
+  appKey:
+  masterSecret:
+  liveTime: 300000
+  title: 消防平台
